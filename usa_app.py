@@ -643,9 +643,24 @@ with st.sidebar:
         
         # Theme Switcher (moved here from top)
         st.write("")  # Just spacing
-        from config.theme_presets import get_theme_names
         
-        theme_options = get_theme_names()
+        # Inline theme definitions (no external config dependency)
+        THEMES = {
+            'blue_corporate': {
+                'name': 'Blue Corporate',
+                'gradient': 'linear-gradient(135deg, #1e88e5 0%, #ffd700 100%)',
+            },
+            'emerald_gold': {
+                'name': 'Emerald & Gold',
+                'gradient': 'linear-gradient(135deg, #10b981 0%, #f59e0b 100%)',
+            },
+            'purple_rose': {
+                'name': 'Purple & Rose',
+                'gradient': 'linear-gradient(135deg, #8b5cf6 0%, #f43f5e 100%)',
+            },
+        }
+        
+        theme_options = {k: v['name'] for k, v in THEMES.items()}
         selected_theme = st.selectbox(
             "Color Theme",
             options=list(theme_options.keys()),
@@ -657,9 +672,8 @@ with st.sidebar:
     # Extract button with theme-aware gradient
     st.write("")  # Just spacing
     
-    # Dynamic button styling based on selected theme
-    from config.theme_presets import get_theme
-    theme = get_theme(selected_theme)
+    # Get selected theme
+    theme = THEMES.get(selected_theme, THEMES['blue_corporate'])
     
     st.markdown(f"""
     <style>
